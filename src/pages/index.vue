@@ -37,16 +37,31 @@ function query() {
     urlParams.key = theKey
   }
 }
+
+function create() {
+  const key = $ref(myNanoid(5))
+  console.log(key)
+}
 </script>
 
 <template>
   <div>
-    <KeySearcher
-      v-model:modal-value="theKey"
-      placeholder="Type to search or create..."
-      autocomplete="false"
-      @keydown.enter="query"
-    />
+    <div flex justify-between gap10>
+      <KeySearcher
+        v-model:modal-value="theKey"
+        placeholder="Type to search or create..."
+        autocomplete="false"
+        @keydown.enter="query"
+      />
+
+      <button
+        inline-flex items-center gap-1 btn
+        @click="create"
+      >
+        <div i-carbon:task-add />
+        <span>Create</span>
+      </button>
+    </div>
 
     <div my-8 />
 
