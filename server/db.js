@@ -7,8 +7,8 @@ async function insert(data, key) {
   if (Array.isArray(data)) {
     const items = data.map(i => ({
       key,
-      title: data.title,
-      href: data.href,
+      title: i.title,
+      href: i.href,
     }))
     result = await LinksTable.save(items)
   }

@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
+/* eslint-disable unused-imports/no-unused-vars */
 // @see https://docs.aircode.io/guide/functions/
 const aircode = require('aircode')
-const { insert, find } = require('./db')
+const { find } = require('./db')
 
 module.exports = async function (params, context) {
   console.log('Received params:', params)
@@ -19,8 +21,3 @@ module.exports = async function (params, context) {
 
   return response
 }
-
-// const result = await insert({
-//   title: 'nihao',
-//   href: 'https://baidu.com'
-// },query)

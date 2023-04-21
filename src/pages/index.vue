@@ -5,7 +5,7 @@ defineOptions({
   name: 'IndexPage',
 })
 
-const api = 'https://tkk39wqfcw.hk.aircode.run'
+const api = 'https://nj1u2gm89u.hk.aircode.run'
 
 let theKey = $ref('')
 
@@ -20,13 +20,13 @@ const params = computed(() => ({
 const urlParams = useUrlSearchParams('history')
 
 onMounted(() => {
-  if (typeof urlParams.key === 'string') {
+  if (urlParams.key && !Array.isArray(urlParams.key)) {
     theKey = urlParams.key
     query()
   }
 })
 
-const { data, execute: fetchData, onFetchResponse } = useFetch(`${api}/server`, {
+const { data, execute: fetchData, onFetchResponse } = useFetch(`${api}/query`, {
   immediate: false,
 }).post(params).json<{
   data: ILink[]
@@ -39,7 +39,10 @@ onFetchResponse((res) => {
 
 const { execute: createShare } = useFetch(`${api}/create`, {
   immediate: false,
-}).post(links)
+}).post(computed(() => ({
+  key: creationKey,
+  link: links.value.at(-1),
+})))
 
 function query() {
   if (theKey && theKey.length === 5) {
