@@ -1,16 +1,17 @@
 <script setup lang="ts">
+import type { ILink } from '~/composables/link'
+
 defineOptions({
   name: 'IndexPage',
 })
 
-interface TheLink {
-  href: string
-  title: string
-}
-
-const api = 'https://tkk39wqfcw.hk.aircode.run/server'
+const api = 'https://tkk39wqfcw.hk.aircode.run'
 
 let theKey = $ref('')
+
+let creationKey = $ref<string | null>(null)
+
+const { links, setLinks, addLink, clearLinks } = useLinks()
 
 const params = computed(() => ({
   query: theKey,
@@ -25,22 +26,52 @@ onMounted(() => {
   }
 })
 
-const { data, isFetching, execute } = useFetch(api, {
+const { data, execute: fetchData, onFetchResponse } = useFetch(`${api}/server`, {
   immediate: false,
 }).post(params).json<{
-  data: TheLink[]
+  data: ILink[]
 }>()
+
+onFetchResponse((res) => {
+  if (res.ok && data.value !== null)
+    setLinks(data.value.data)
+})
+
+const { execute: createShare } = useFetch(`${api}/create`, {
+  immediate: false,
+}).post(links)
 
 function query() {
   if (theKey && theKey.length === 5) {
-    execute()
+    fetchData()
     urlParams.key = theKey
+    creationKey = null
   }
 }
 
 function create() {
-  const key = $ref(myNanoid(5))
-  console.log(key)
+  theKey = ''
+  creationKey = myNanoid(5)
+  clearLinks()
+}
+
+async function insertLinkByCreating() {
+  if (creationKey) {
+    const copied = await navigator.clipboard.readText()
+
+    if (links.value.some(l => l.href === copied))
+      return
+
+    const title = parsedLinkTitle(copied)
+
+    if (title) {
+      addLink({
+        title,
+        href: copied,
+      })
+      createShare()
+    }
+  }
 }
 </script>
 
@@ -50,6 +81,7 @@ function create() {
       <KeySearcher
         v-model:modal-value="theKey"
         placeholder="Type to search or create..."
+        aria-autocomplete="list"
         autocomplete="false"
         @keydown.enter="query"
       />
@@ -65,16 +97,22 @@ function create() {
 
     <div my-8 />
 
-    <section
-      class="bg-white dark:bg-[#1a1a1a]"
-      border="~ gray/20 rounded"
-      p="x-4 y-4 lg:x-8 lg:y-8"
-      flex="~ col"
-      gap3 shadow lg:gap5
+    <div
+      v-if="creationKey"
+      my-4 h-10 w-full flex rounded-md bg-gray:25 lh-10
     >
-      <template v-for="{ href, title } in data?.data" :key="href">
-        <TheLink :href="href" :title="title" />
-      </template>
-    </section>
+      <span
+        flex-1 cursor-pointer rounded op50 hover:bg-gray:30
+        transition="~ all duration-300 ease-in-out"
+        @click="insertLinkByCreating"
+      >
+        Please copy the link and click me to add it.
+      </span>
+      <span rounded px-4 text-blue-600 dark:text-blue-300 hover="op70">
+        {{ creationKey }}
+      </span>
+    </div>
+
+    <TheList :data="links" />
   </div>
 </template>

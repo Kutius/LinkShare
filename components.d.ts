@@ -12,12 +12,8 @@ declare module '@vue/runtime-core' {
     KeySearcher: typeof import('./src/components/KeySearcher.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Starport: typeof import('vue-starport')['Starport']
-    StarportCarrier: typeof import('vue-starport')['StarportCarrier']
-    TheCounter: typeof import('./src/components/TheCounter.vue')['default']
-    TheFooter: typeof import('./src/components/TheFooter.vue')['default']
     TheHeader: typeof import('./src/components/TheHeader.vue')['default']
-    TheInput: typeof import('./src/components/TheInput.vue')['default']
     TheLink: typeof import('./src/components/TheLink.vue')['default']
+    TheList: typeof import('./src/components/TheList.vue')['default']
   }
 }
