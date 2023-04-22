@@ -16,10 +16,11 @@ const { copy, copied } = useClipboard({ source: href })
   >
     <a
       :href="href"
-      flex-1 text-sky-500 underline-warmgray
+      target="_blank"
       hover="underline text-sky-600"
       decoration="auto offset-3"
       transition="~ all duration-150 ease-in"
+      flex-1 text-sky-500 underline-warmgray
     >
       {{ title }}
     </a>

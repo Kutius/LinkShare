@@ -80,7 +80,7 @@ async function insertLinkByCreating() {
 
 <template>
   <div>
-    <div flex justify-between gap10>
+    <div flex justify-between gap4 md:gap10>
       <KeySearcher
         v-model:modal-value="theKey"
         placeholder="Type to search or create..."
@@ -105,7 +105,7 @@ async function insertLinkByCreating() {
       my-4 h-10 w-full flex rounded-md bg-gray:25 lh-10
     >
       <span
-        flex-1 cursor-pointer rounded op50 hover:bg-gray:30
+        flex-1 cursor-pointer truncate rounded px-3 op50 hover:bg-gray:30
         transition="~ all duration-300 ease-in-out"
         @click="insertLinkByCreating"
       >
