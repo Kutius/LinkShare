@@ -1,10 +1,18 @@
 <script setup lang="ts">
+import { useToast } from 'vue-toastification'
+
 const { href, title } = $defineProps<{
   href: string
   title: string
 }>()
 
 const { copy, copied } = useClipboard({ source: href })
+const toast = useToast()
+
+function copyAndToast(v: string) {
+  copy(v)
+  toast.success('Copied!')
+}
 </script>
 
 <template>
@@ -25,7 +33,7 @@ const { copy, copied } = useClipboard({ source: href })
       {{ title }}
     </a>
 
-    <button text-gray5 @click="copy(href)">
+    <button text-gray5 @click="copyAndToast(href)">
       <Transition name="fade">
         <div v-if="!copied" i-carbon-copy-link h-full icon-btn />
         <div v-else i-carbon:checkmark-filled h-full icon-btn />

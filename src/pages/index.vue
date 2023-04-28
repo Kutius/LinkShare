@@ -7,17 +7,15 @@ defineOptions({
 
 const api = 'https://nj1u2gm89u.hk.aircode.run'
 
-let theKey = $ref('')
-
-let creationKey = $ref<string | null>(null)
-
 const { links, setLinks, addLink, clearLinks } = useLinks()
+const urlParams = useUrlSearchParams('history')
+
+let theKey = $ref('')
+let creationKey = $ref<string | null>(null)
 
 const params = computed(() => ({
   query: theKey,
 }))
-
-const urlParams = useUrlSearchParams('history')
 
 onMounted(() => {
   if (urlParams.key && !Array.isArray(urlParams.key)) {
